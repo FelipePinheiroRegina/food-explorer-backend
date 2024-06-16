@@ -1,27 +1,21 @@
-const AppError = require('../utils/AppError')
-const knex = require('../database/knex')
-const { hash } = require('bcryptjs')
+const UserRepository = require('../repositories/UserRepository')
+const UserCreateService = require('../services/UserCreateService')
+
 
 class UsersController {
     async create(request, response) {
         const { name, email, password } = request.body
         
-        const [ emailAlreadyExist ] = await knex('users').where({ email })
-       
-        if (emailAlreadyExist) {
-            throw new AppError('E-mail already exists!')
-        }
+        const userRepository = new UserRepository()
+        const userCreateService = new UserCreateService(userRepository)
 
-        try {
-            const hashPassword = await hash(password, 8)
+        await userCreateService.execute({ name, email, password })
+        
+        return response.json('User created')
+    }
 
-            await knex('users').insert({ name, email, password: hashPassword })
-
-            return response.json('User created successfully')
-
-        } catch (error) {
-            throw new AppError(error)
-        }
+    async update(request, response) {
+        return response.json('Você passou pelo middleware')
     }
 }
 
