@@ -8,10 +8,20 @@ class UserRepository {
         return user
     }
 
+    async findById(id) {
+        const [ user ] = await knex('users').where({id})
+
+        return user
+    }
+
     async create({ name, email, password }) {
         const userId = await knex('users').insert({ name, email, password })
 
         return {id: userId}     
+    }
+
+    async update(id, user) {
+        await knex('users').update(user).where({ id })
     }
 }
 
