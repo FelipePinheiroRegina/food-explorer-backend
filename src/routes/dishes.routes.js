@@ -10,6 +10,11 @@ const uploadConfig = require('../configs/uploads')
 const multer = require('multer')
 const upload = multer(uploadConfig.MULTER)
 
-dishesRoutes.post('/', ensureAuth, upload.single("image"), dishesController.create)
+dishesRoutes.use(ensureAuth)
+
+dishesRoutes.post('/', upload.single("image"), dishesController.create)
+
+dishesRoutes.get('/', dishesController.index)
+dishesRoutes.get('/:id', dishesController.show)
 
 module.exports = dishesRoutes
