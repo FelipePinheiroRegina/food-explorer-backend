@@ -1,4 +1,4 @@
-const UserRepository = require('../repositories/UserRepository')
+const UserRepository = require('../DatabaseRepositories/UserRepository')
 const UserCreateService = require('../services/UserCreateService')
 const UserUpdateService = require('../services/UserUpdateService')
 
