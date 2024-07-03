@@ -3,12 +3,13 @@ const { toZonedTime } = require('date-fns-tz');
 
 const DishesRepository = require('../DatabaseRepositories/DishesRepository')
 const DishesCreateService = require('../services/DishesCreateService')
+const DishesIndexService = require('../services/DishesIndexService')
 
 const DiskStorage = require('../providers/DiskStorage')
 const knex = require('../database/knex')
 const AppError = require('../utils/AppError')
 
-// INVERTENDO DAS DEPENDÊNCIAS, SEPARANDO A LÓGICA DO BANCO DE DADOS E DO CONTROLLER   
+// INVERTENDO AS DEPENDÊNCIAS, SEPARANDO A LÓGICA DO BANCO DE DADOS E DO CONTROLLER 
 
 class DishesController {
     async create(request, response) {
@@ -25,28 +26,11 @@ class DishesController {
 
     async index(request, response) {
         const { name } = request.query
-    
-        let dishes = []
-    
-        if (name) {
-            dishes = await knex('dishes').whereLike("dishes.name", `%${name}%`)
-    
-            if (dishes.length === 0) {
-                const ingredients = await knex('ingredients').whereLike("ingredients.name", `%${name}%`)
-    
-                if (ingredients.length > 0) {
-                    const ingredientIds = ingredients.map(ingredient => ingredient.id)
-    
-                    dishes = await knex('dishes')
-                        .whereIn('id', function() {
-                            this.select('id_dishe').from('ingredients')
-                                .whereIn('id', ingredientIds)
-                        })
-    
-                }     
-            }
-                  
-        }
+        
+        const dishesRepository = new DishesRepository()
+        const dishesIndexService = new DishesIndexService(dishesRepository)
+
+        const dishes = await dishesIndexService.execute(name)
     
         return response.json(dishes)
     }

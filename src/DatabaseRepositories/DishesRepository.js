@@ -17,6 +17,29 @@ class DishesRepository {
     async createIngredients(insertIngredients) {
         await knex('ingredients').insert(insertIngredients)
     }
+
+    async searchDishes(name) {
+        const dishes = await knex('dishes').whereLike("dishes.name", `%${name}%`)
+
+        return dishes
+    }
+
+    async searchIngredients(name) {
+        const ingredients = knex('ingredients').whereLike("ingredients.name", `%${name}%`)
+
+        return ingredients
+    }
+
+    async searchDishesWhatContainThisIngredients(ingredientIds) {
+        const dishes = await knex('dishes')
+                .whereIn('id', function() { 
+                    this.select('id_dishe')
+                    .from('ingredients')
+                    .whereIn('id', ingredientIds)
+                })
+
+        return dishes        
+    }
 }
 
 module.exports = DishesRepository
