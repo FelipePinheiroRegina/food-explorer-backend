@@ -2,10 +2,39 @@
 const knex = require('../database/knex')
 
 class DishesRepository {
+    async findByAll() {
+        const dishes = await knex('dishes')
+
+        return dishes
+    }
+
     async findByName(name) {
-        const [ dish ] = await knex('dishes').where({ name })
+        const dishes = await knex('dishes').whereLike("dishes.name", `%${name}%`)
+
+        return dishes
+    }
+
+    async findById(id) {
+        const [ dish ] = await knex('dishes').where({ id })
 
         return dish
+    }
+
+    async findByNameIngredients(name) {
+        const ingredients = knex('ingredients').whereLike("ingredients.name", `%${name}%`)
+
+        return ingredients
+    }
+
+    async findByDishesWithIdIngredients(ingredientIds) {
+        const dishes = await knex('dishes')
+                .whereIn('id', function() { 
+                    this.select('id_dishe')
+                    .from('ingredients')
+                    .whereIn('id', ingredientIds)
+                })
+
+        return dishes        
     }
 
     async create({ name, image, description, price, category }) {
@@ -18,27 +47,16 @@ class DishesRepository {
         await knex('ingredients').insert(insertIngredients)
     }
 
-    async searchDishes(name) {
-        const dishes = await knex('dishes').whereLike("dishes.name", `%${name}%`)
+    async update(id, dish) {
+        await knex('dishes').where({ id }).update(dish)
 
-        return dishes
+        return true
     }
+    
+    async delete(id) {
+        await knex('dishes').where({ id }).del()
 
-    async searchIngredients(name) {
-        const ingredients = knex('ingredients').whereLike("ingredients.name", `%${name}%`)
-
-        return ingredients
-    }
-
-    async searchDishesWhatContainThisIngredients(ingredientIds) {
-        const dishes = await knex('dishes')
-                .whereIn('id', function() { 
-                    this.select('id_dishe')
-                    .from('ingredients')
-                    .whereIn('id', ingredientIds)
-                })
-
-        return dishes        
+        return true
     }
 }
 

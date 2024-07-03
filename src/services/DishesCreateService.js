@@ -7,7 +7,7 @@ class DishesCreateService {
     }
 
     async execute({ name, description, price, category, ingredients }, dishFileName) {
-        const dishExists = await this.dishesRepository.findByName(name)
+        const [ dishExists ] = await this.dishesRepository.findByName(name)
 
         if(dishExists) {
             throw new AppError('Dish already exists')

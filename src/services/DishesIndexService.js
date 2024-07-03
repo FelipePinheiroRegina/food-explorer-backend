@@ -5,21 +5,23 @@ class DishesIndexService {
 
     async execute(name) {
 
-        let dishes = []
-    
+        let dishes
+        
         if (name) {
-            dishes = await this.dishesRepository.searchDishes(name)
+            dishes = await this.dishesRepository.findByName(name)
     
             if (dishes.length === 0) {
-                const ingredients = await this.dishesRepository.searchIngredients(name)
+                const ingredients = await this.dishesRepository.findByNameIngredients(name)
     
                 if (ingredients.length > 0) {
                     const ingredientIds = ingredients.map(ingredient => ingredient.id)
     
-                    dishes = await this.dishesRepository.searchDishesWhatContainThisIngredients(ingredientIds)
+                    dishes = await this.dishesRepository.findByDishesWithIdIngredients(ingredientIds)
                 }     
             }
                   
+        } else {
+            dishes = await this.dishesRepository.findByAll()
         }
     
         return dishes
