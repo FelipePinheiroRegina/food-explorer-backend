@@ -37,8 +37,8 @@ class DishesRepository {
         return dishes        
     }
 
-    async create({ name, image, description, price, category }) {
-        const [ id_dishe ] = await knex('dishes').insert({ name, image, description, price, category })
+    async create({ name, image, description, price, category, dateFormated }) {
+        const [ id_dishe ] = await knex('dishes').insert({ name, image, description, price, category, created_at:  dateFormated, updated_at: dateFormated})
 
         return id_dishe  
     }

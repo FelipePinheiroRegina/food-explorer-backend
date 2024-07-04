@@ -1,20 +1,22 @@
 // Lógica do banco de dados
-const DishesRepository    = require('../DatabaseRepositories/DishesRepository')
+const DishesRepository      = require('../databaseRepositories/DishesRepository')
+const IngredientsRepository = require('../databaseRepositories/IngredientsRepository')
 
 // Lógica do serviço
-const DishesCreateService = require('../services/DishesCreateService')
-const DishesIndexService  = require('../services/DishesIndexService')
-const DisheShowService    = require('../services/DishesShowService')
-const DishesUpdateService = require('../services/DishesUpdateService')
-const DishesDeleteService = require('../services/DishesDeleteService')
+const DishesCreateService = require('../services/dishesService/DishesCreateService')
+const DishesIndexService  = require('../services/dishesService/DishesIndexService')
+const DisheShowService    = require('../services/dishesService/DishesShowService')
+const DishesUpdateService = require('../services/dishesService/DishesUpdateService')
+const DishesDeleteService = require('../services/dishesService/DishesDeleteService')
 
 class DishesController {
     async create(request, response) {
         const { name, description, price, category, ingredients } = request.body
         const dishFileName = request.file.filename 
         
-        const dishesRepository = new DishesRepository()
-        const dishesCreateService = new DishesCreateService(dishesRepository)
+        const dishesRepository      = new DishesRepository()
+        const ingredientsRepository = new IngredientsRepository()
+        const dishesCreateService   = new DishesCreateService(dishesRepository, ingredientsRepository)
         
         await dishesCreateService.execute({ name, description, price, category, ingredients }, dishFileName)
         
@@ -24,8 +26,9 @@ class DishesController {
     async index(request, response) {
         const { name } = request.query
         
-        const dishesRepository = new DishesRepository()
-        const dishesIndexService = new DishesIndexService(dishesRepository)
+        const dishesRepository      = new DishesRepository()
+        const ingredientsRepository = new IngredientsRepository()
+        const dishesIndexService    = new DishesIndexService(dishesRepository, ingredientsRepository)
 
         const dishes = await dishesIndexService.execute(name)
     
@@ -45,13 +48,14 @@ class DishesController {
 
     async update(request, response) {
         const { id } = request.params
-        const { name, description, price, category } = request.body
+        const { name, description, price, category, ingredients } = request.body
         const dishFilename = request.file ? request.file.filename : null 
 
-        const dishesRepository    = new DishesRepository()
-        const dishesUpdateService = new DishesUpdateService(dishesRepository)
+        const dishesRepository      = new DishesRepository()
+        const ingredientsRepository = new IngredientsRepository()
+        const dishesUpdateService   = new DishesUpdateService(dishesRepository, ingredientsRepository)
 
-        const dish = await dishesUpdateService.execute(id, {name, description, price, category}, dishFilename)
+        const dish = await dishesUpdateService.execute(id, {name, description, price, category, ingredients}, dishFilename)
 
         return response.json(dish)
     

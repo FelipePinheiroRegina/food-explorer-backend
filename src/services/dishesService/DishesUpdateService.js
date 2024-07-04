@@ -1,18 +1,20 @@
 const { format } = require('date-fns');
 const { toZonedTime } = require('date-fns-tz');
 
-const DiskStorage = require('../providers/DiskStorage')
-const AppError = require('../utils/AppError')
+const DiskStorage = require('../../providers/DiskStorage')
+const AppError = require('../../utils/AppError')
 
 class DishesUpdateService {
-    constructor(dishesRepository) {
-        this.dishesRepository = dishesRepository
+    constructor(dishesRepository, ingredientsRepository) {
+        this.dishesRepository      = dishesRepository
+        this.ingredientsRepository = ingredientsRepository
     }
 
-    async execute(id, { name, description, price, category }, dishFilename) { 
+    async execute(id, { name, description, price, category, ingredients }, dishFilename) { 
         const diskStorage = new DiskStorage()
     
-        const dish = await this.dishesRepository.findById(id)
+        const dish        = await this.dishesRepository.findById(id)
+        const oldIngredients = await this.ingredientsRepository.findById(id)
         
         if (!dish) {
             throw new AppError('Dish not found')
@@ -49,9 +51,31 @@ class DishesUpdateService {
         // Executa a atualização no banco de dados
         await this.dishesRepository.update(id, dish)
 
+        // Se existir novos ingredientes
+        if(ingredients != undefined) {
+
+            // Se já existir ingredientes, apague.
+            if(oldIngredients.length > 0) {
+                oldIngredients.forEach(async ingredient => {
+                    await this.ingredientsRepository.delete(ingredient.id)
+                })
+            }
+
+            ingredients =  Array.isArray(ingredients) ? ingredients : Array(ingredients) 
+
+            const insertIngredients = ingredients.map(name => {
+                return {
+                    name,
+                    id_dishe: id,
+                    updated_at: dateFormated
+                }
+            })
+    
+            await this.ingredientsRepository.create(insertIngredients)
+        }
+        
         // Retorna o prato atualizado como resposta
         return dish
-       
     }
 }
 

@@ -1,6 +1,7 @@
 class DishesIndexService {
-    constructor(dishesRepository) {
-        this.dishesRepository = dishesRepository
+    constructor(dishesRepository, ingredientsRepository) {
+        this.dishesRepository      = dishesRepository
+        this.ingredientsRepository = ingredientsRepository
     }
 
     async execute(name) {
@@ -11,7 +12,7 @@ class DishesIndexService {
             dishes = await this.dishesRepository.findByName(name)
     
             if (dishes.length === 0) {
-                const ingredients = await this.dishesRepository.findByNameIngredients(name)
+                const ingredients = await this.ingredientsRepository.findByNameIngredients(name)
     
                 if (ingredients.length > 0) {
                     const ingredientIds = ingredients.map(ingredient => ingredient.id)

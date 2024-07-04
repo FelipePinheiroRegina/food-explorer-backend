@@ -8,7 +8,6 @@ const ensureAuth = require('../middlewares/ensureAuth')
 
 const uploadConfig = require('../configs/uploads')
 const multer = require('multer')
-const { update } = require('../database/knex')
 const upload = multer(uploadConfig.MULTER)
 
 dishesRoutes.use(ensureAuth)
