@@ -1,5 +1,5 @@
 const SessionCreateService = require('../services/sessionsService/SessionsCreateService')
-const UserRepository = require('../databaseRepositories/UserRepository')
+const UserRepository = require('../Repositories/UserRepository')
 
 class SessionsController {
     async create(request, response) {

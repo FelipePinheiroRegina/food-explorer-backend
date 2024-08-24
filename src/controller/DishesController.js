@@ -1,6 +1,6 @@
 // database logic
-const DishesRepository      = require('../databaseRepositories/DishesRepository')
-const IngredientsRepository = require('../databaseRepositories/IngredientsRepository')
+const DishesRepository      = require('../Repositories/DishesRepository')
+const IngredientsRepository = require('../Repositories/IngredientsRepository')
 
 // service logic
 const DishesCreateService = require('../services/dishesService/DishesCreateService')

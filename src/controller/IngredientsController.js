@@ -1,4 +1,4 @@
-const IngredientsRepository = require('../databaseRepositories/IngredientsRepository')
+const IngredientsRepository = require('../Repositories/IngredientsRepository')
 
 const IngredientsIndexService = require('../services/ingredientsService/IngredientsIndexService')
 
