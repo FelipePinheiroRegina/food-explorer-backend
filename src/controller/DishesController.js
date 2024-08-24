@@ -1,8 +1,8 @@
-// Lógica do banco de dados
+// database logic
 const DishesRepository      = require('../databaseRepositories/DishesRepository')
 const IngredientsRepository = require('../databaseRepositories/IngredientsRepository')
 
-// Lógica do serviço
+// service logic
 const DishesCreateService = require('../services/dishesService/DishesCreateService')
 const DishesIndexService  = require('../services/dishesService/DishesIndexService')
 const DisheShowService    = require('../services/dishesService/DishesShowService')
@@ -11,7 +11,8 @@ const DishesDeleteService = require('../services/dishesService/DishesDeleteServi
 
 class DishesController {
     async create(request, response) {
-        const { name, description, price, category, ingredients } = request.body
+        const { name, description, price, category } = request.body
+        const ingredients = JSON.parse(request.body.ingredients)
         const dishFileName = request.file.filename 
         
         const dishesRepository      = new DishesRepository()
@@ -48,7 +49,8 @@ class DishesController {
 
     async update(request, response) {
         const { id } = request.params
-        const { name, description, price, category, ingredients } = request.body
+        const { name, description, price, category } = request.body
+        const ingredients = JSON.parse(request.body.ingredients)
         const dishFilename = request.file ? request.file.filename : null 
 
         const dishesRepository      = new DishesRepository()

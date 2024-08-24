@@ -8,7 +8,7 @@ class UserUpdateService {
 
     async execute(id, { name, email, password, newPassword }) {
         const user = await this.userRepository.findById(id)
-
+        
         const findEmailEqualThis = await this.userRepository.findByEmail(email)
 
         if(findEmailEqualThis && findEmailEqualThis.id !== user.id) {
@@ -32,7 +32,9 @@ class UserUpdateService {
             user.password = await hash(newPassword, 8)
         }
         
-        await this.userRepository.update(id, user)
+        const response = await this.userRepository.update(id, user)
+
+        return response
     }
 }
 

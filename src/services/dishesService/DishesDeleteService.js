@@ -12,13 +12,13 @@ class DishesDeleteService {
         if (!dish) {
             throw new AppError('Dish not found')
         }
-
+        
         const diskStorage = new DiskStorage()
         diskStorage.deleteFile(dish.image)
         
-        await this.dishesRepository.delete(id)
-    
-        return true
+        const response = await this.dishesRepository.delete(id)
+       
+        return response
     }
 }
 

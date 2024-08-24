@@ -39,14 +39,14 @@ class DishesUpdateService {
         const dateHoursBrazilia = toZonedTime(now, brazilianTimeZone)
 
         // Formata para o formato desejado para inserção no banco de dados (YYYY-MM-DD HH:mm:ss)
-        const dateFormated = format(dateHoursBrazilia, 'yyyy-MM-dd HH:mm:ss')
+        const dateFormatted = format(dateHoursBrazilia, 'yyyy-MM-dd HH:mm:ss')
 
         // Atualiza os demais campos do prato
         dish.name        = name        ?? dish.name
         dish.description = description ?? dish.description
         dish.price       = price       ?? dish.price
         dish.category    = category    ?? dish.category
-        dish.updated_at  = dateFormated
+        dish.updated_at  = dateFormatted
 
         // Executa a atualização no banco de dados
         await this.dishesRepository.update(id, dish)
@@ -67,7 +67,7 @@ class DishesUpdateService {
                 return {
                     name,
                     id_dishe: id,
-                    updated_at: dateFormated
+                    updated_at: dateFormatted
                 }
             })
     

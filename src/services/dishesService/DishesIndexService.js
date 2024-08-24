@@ -16,7 +16,7 @@ class DishesIndexService {
     
                 if (ingredients.length > 0) {
                     const ingredientIds = ingredients.map(ingredient => ingredient.id)
-    
+                    
                     dishes = await this.dishesRepository.findByDishesWithIdIngredients(ingredientIds)
                 }     
             }

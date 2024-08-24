@@ -22,16 +22,16 @@ class DishesCreateService {
         const dateFormated = format(dateHoursBrazilia, 'yyyy-MM-dd HH:mm:ss')
 
         const [ dishExists ] = await this.dishesRepository.findByName(name)
-
+    
         if(dishExists) {
             throw new AppError('Dish already exists')
         }
-
+        
         const diskStorage = new DiskStorage()
         const image = await diskStorage.saveFile(dishFileName)
 
         const id_dishe = await this.dishesRepository.create({name, image, description, price, category, dateFormated})
-
+        
         const insertIngredients = ingredients.map(name => {
             return {
                 name,
@@ -41,9 +41,9 @@ class DishesCreateService {
             }
         })
 
-        await this.ingredientsRepository.create(insertIngredients)
+        const successIngredients =  await this.ingredientsRepository.create(insertIngredients)
 
-        return id_dishe
+        return {id_dishe, successIngredients}
     }
 }
 
