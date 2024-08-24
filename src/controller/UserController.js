@@ -3,7 +3,7 @@ const UserRepository = require('../databaseRepositories/UserRepository')
 const UserCreateService = require('../services/usersService/UserCreateService')
 const UserUpdateService = require('../services/usersService/UserUpdateService')
 
-class UsersController {
+class UserController {
     async create(request, response) {
         const { name, email, password } = request.body
         
@@ -28,4 +28,4 @@ class UsersController {
     }
 }
 
-module.exports = UsersController
+module.exports = UserController
