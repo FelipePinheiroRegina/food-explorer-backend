@@ -10,14 +10,16 @@ class SessionsController {
         
         const { user, token } = await sessionCreateService.execute(email, password)
         
+        /*
         response.cookie("token", token, {
             httpOnly: true,
             sameSite: 'none',
             secure: true,
             maxAge: 60 * 60 * 1000
         })
-        
-        return response.json({ user })
+        */
+
+        return response.json({ user, token })
     }
 }
 

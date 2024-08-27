@@ -11,10 +11,15 @@ const cookieParser = require('cookie-parser')
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
+app.use(cors())
+
+// cookies
+/*
 app.use(cors({
     origin: ["https://food-explorer-pinheiro.netlify.app/"],
     credentials: true 
 }))
+*/
 
 app.use('/files', express.static(uploadConfig.UPLOADS_FOLDER))
 
@@ -37,7 +42,7 @@ app.use((error, request, response, next) => {
 })
 
 const PORT = process.env.SERVER_PORT || 3333
-app.listen(PORT, () => console.log('Server is running on PORT: ' + PORT))
+app.listen(PORT, '0.0.0.0', () => console.log('Server is running on PORT: ' + PORT))
 
 
 
