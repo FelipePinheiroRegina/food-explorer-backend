@@ -43,4 +43,9 @@ Por fim, utilizei Jest para realizar os testes automatizados da aplicação, gar
 6. **Para rodar o projeto em modo de desenvolvimento**, execute: `npm run dev`.
 7. **Para rodar o projeto em produção**, execute: `npm start`.
 
+#### Repositório do front-end
+- [Repositório](https://github.com/FelipePinheiroRegina/food-explorer-frontend)
+- [Projeto no ar](https://food-explorer-pinheiro.netlify.app/)
+
+
    
